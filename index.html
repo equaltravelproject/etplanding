@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Equal Travel Project — Know before you go</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F4EF;
+  --ink:#1B2B29;
+  --mute:#4E5F5C;
+  --line:#D8D2C4;
+  --moss:#2F5D50;
+  --clay:#C6602F;
+  --card:#FFFFFF;
+  --focus:#C6602F;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12201D; --ink:#EDF3F0; --mute:#AFC2BC; --line:#2E4640;
+    --moss:#6FBBA0; --clay:#E2895A; --card:#182D28;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12201D; --ink:#EDF3F0; --mute:#AFC2BC; --line:#2E4640;
+  --moss:#6FBBA0; --clay:#E2895A; --card:#182D28;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Atkinson Hyperlegible', Verdana, sans-serif;
+  font-size:18px;
+  line-height:1.6;
+}
+h1,h2,h3{
+  font-family:'Fraunces', Georgia, serif;
+  font-weight:600;
+  line-height:1.15;
+  margin:0;
+  letter-spacing:-0.01em;
+}
+a{color:var(--moss)}
+:focus-visible{outline:3px solid var(--focus); outline-offset:3px}
+.skip{position:absolute;left:-999px;top:0;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:0 0 8px 0;z-index:100}
+.skip:focus{left:0}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+header.site{display:flex;align-items:center;justify-content:space-between;padding:22px 0;max-width:760px;margin:0 auto;padding-left:24px;padding-right:24px;flex-wrap:wrap;gap:10px}
+.wordmark{font-family:'Fraunces',serif;font-weight:600;font-size:1.15em;color:var(--ink);text-decoration:none}
+.wordmark span{color:var(--clay)}
+nav.site a{margin-left:22px;font-weight:700;text-decoration:none;color:var(--moss);font-size:.95em}
+nav.site a:first-child{margin-left:0}
+
+.hero{padding:56px 0 48px;border-bottom:2px solid var(--line)}
+.hero h1{font-size:clamp(2.3em,7vw,3.4em);max-width:11ch}
+.hero .lede{margin-top:20px;max-width:56ch;font-size:1.15em;color:var(--mute)}
+.hero .cta-row{margin-top:32px;display:flex;gap:14px;flex-wrap:wrap}
+
+.btn{
+  display:inline-block;
+  padding:14px 26px;
+  border-radius:10px;
+  font-weight:700;
+  text-decoration:none;
+  font-size:1em;
+  border:2px solid transparent;
+}
+.btn-primary{background:var(--moss);color:var(--bg)}
+.btn-primary:hover{filter:brightness(0.92)}
+.btn-ghost{border-color:var(--moss);color:var(--moss)}
+.btn-ghost:hover{background:var(--moss);color:var(--bg)}
+
+.route{
+  margin-top:40px;
+  padding:18px 20px;
+  border:2px solid var(--line);
+  border-radius:14px;
+  background:var(--card);
+  font-size:.98em;
+  color:var(--mute);
+}
+.route b{color:var(--ink)}
+
+section.block{padding:52px 0;border-bottom:2px solid var(--line)}
+section.block:last-of-type{border-bottom:none}
+.block h2{font-size:clamp(1.6em,4.5vw,2.1em);max-width:16ch}
+.block .body{margin-top:16px;max-width:60ch;font-size:1.05em;color:var(--mute)}
+
+.trio{margin-top:34px;display:grid;gap:18px}
+.trio .item{border-left:4px solid var(--clay);padding:4px 0 4px 18px}
+.trio .item h3{font-size:1.05em;color:var(--ink)}
+.trio .item p{margin:6px 0 0;color:var(--mute);font-size:.98em}
+
+.mission{background:var(--moss);color:var(--bg)}
+.mission h2{color:var(--bg)}
+.mission .body{color:var(--bg);opacity:.9}
+
+.steps{margin-top:30px;counter-reset:step;display:grid;gap:22px}
+.step{display:flex;gap:16px;align-items:flex-start}
+.step .num{
+  font-family:'Fraunces',serif;font-weight:600;
+  font-size:1.3em;color:var(--clay);
+  min-width:1.4em;
+}
+.step .txt h3{font-size:1.05em}
+.step .txt p{margin:4px 0 0;color:var(--mute);font-size:.98em}
+
+.signup{padding:56px 0 64px}
+.signup h2{font-size:clamp(1.7em,5vw,2.2em)}
+.signup .body{margin-top:14px;color:var(--mute);max-width:60ch}
+form{margin-top:30px;max-width:480px;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:26px}
+fieldset{border:0;padding:0;margin:0 0 20px}
+legend{font-weight:700;padding:0 0 10px;font-size:1em}
+.radio-row{display:flex;gap:10px}
+.radio-opt{flex:1;position:relative}
+.radio-opt input{position:absolute;opacity:0;width:100%;height:100%;top:0;left:0;margin:0;cursor:pointer}
+.radio-opt label{
+  display:block;text-align:center;padding:12px 8px;border:2px solid var(--line);
+  border-radius:10px;font-weight:700;cursor:pointer;min-height:44px;
+}
+.radio-opt input:checked + label{border-color:var(--moss);background:var(--moss);color:var(--bg)}
+.radio-opt input:focus-visible + label{outline:3px solid var(--focus);outline-offset:2px}
+
+label.field{display:block;font-weight:700;margin-bottom:6px;margin-top:16px;font-size:.95em}
+input[type=text],input[type=email]{
+  width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:10px;
+  font-size:1em;font-family:inherit;background:var(--bg);color:var(--ink);
+}
+#bizname-wrap{display:none}
+#bizname-wrap.show{display:block}
+.submit{margin-top:22px;width:100%;padding:14px;border:0;border-radius:10px;background:var(--clay);color:#fff;font-weight:700;font-size:1.05em;cursor:pointer;min-height:48px}
+.submit:hover{filter:brightness(0.92)}
+.submit:disabled{opacity:.7;cursor:default}
+.confirm{margin-top:18px;padding:14px 16px;border-radius:10px;background:var(--bg);border:2px solid var(--moss);color:var(--ink);display:none}
+.confirm.show{display:block}
+
+.about-teaser{color:var(--mute);font-size:.95em;margin-top:10px}
+
+footer{padding:36px 0 60px;color:var(--mute);font-size:.9em}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<header class="site">
+  <a class="wordmark" href="#top">Equal<span>Travel</span>Project</a>
+  <nav class="site" aria-label="Primary">
+    <a href="#mission">Mission</a>
+    <a href="#how">How it works</a>
+    <a href="#join">Join the waitlist</a>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="hero wrap" id="top">
+    <h1>Know before you go.</h1>
+    <p class="lede">Equal Travel Project puts access at the center of every review, so you can travel with confidence — built for travelers who need to know what a listing won't tell you.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#join">Join the waitlist</a>
+      <a class="btn btn-ghost" href="#how">See how it works</a>
+    </div>
+    <div class="route" role="note">
+      <b>Planning a trip and traveling with a disability?</b> This is for you. <b>Run a hotel, restaurant, or attraction?</b> This is for you too — claim your listing when we launch.
+    </div>
+  </section>
+
+  <section class="block wrap" id="problem">
+    <h2>The information you need isn't out there.</h2>
+    <p class="body">Star ratings don't tell you if there's a ramp, a quiet hour, or a menu you can actually read. Existing review platforms weren't built with accessibility in mind — not in what they ask travelers, and not in how they work for someone using a screen reader. So travelers are left guessing, and businesses never hear what would actually help.</p>
+    <div class="trio">
+      <div class="item">
+        <h3>Reviews rarely mention access</h3>
+        <p>A five-star rating says nothing about a step at the entrance or a restroom that won't fit a wheelchair.</p>
+      </div>
+      <div class="item">
+        <h3>The review sites themselves aren't accessible</h3>
+        <p>Cluttered layouts and poor screen reader support shut out the very people who need this information most.</p>
+      </div>
+      <div class="item">
+        <h3>Businesses rarely hear it directly</h3>
+        <p>Feedback gets left in a comment somewhere and never reaches the people who could actually act on it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block mission wrap" id="mission">
+    <h2>Access is not a luxury.</h2>
+    <p class="body">Accessibility information shouldn't be buried in comments, guessed at, or missing entirely. Equal Travel Project exists to make it central: clear, specific, and reliable — so travelers can decide for themselves, and businesses know exactly what to improve.</p>
+  </section>
+
+  <section class="block wrap" id="how">
+    <h2>A conversation, not just a rating.</h2>
+    <p class="body">Every review is a two-way street between the people who travel and the places that welcome them.</p>
+    <div class="steps">
+      <div class="step">
+        <span class="num" aria-hidden="true">1</span>
+        <div class="txt">
+          <h3>Travelers share what they actually found</h3>
+          <p>In writing or their own voice — details on step-free access, quiet hours, restrooms, and more.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="num" aria-hidden="true">2</span>
+        <div class="txt">
+          <h3>Businesses respond, in their own words</h3>
+          <p>Owners can reply to reviews and keep their accessibility details accurate and current.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="num" aria-hidden="true">3</span>
+        <div class="txt">
+          <h3>Everyone travels with more confidence</h3>
+          <p>Real, specific, trustworthy information — and a direct line for businesses to actually improve.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="signup wrap" id="join">
+    <h2>Be part of it from the start.</h2>
+    <p class="body">Join the waitlist to hear when Equal Travel Project launches.</p>
+
+    <form id="waitlist-form" novalidate>
+      <fieldset>
+        <legend>I'm signing up as a...</legend>
+        <div class="radio-row" role="radiogroup" aria-label="Signing up as">
+          <span class="radio-opt">
+            <input type="radio" name="role" id="role-traveler" value="traveler" checked>
+            <label for="role-traveler">Traveler</label>
+          </span>
+          <span class="radio-opt">
+            <input type="radio" name="role" id="role-business" value="business">
+            <label for="role-business">Business</label>
+          </span>
+        </div>
+      </fieldset>
+
+      <label class="field" for="name">Name</label>
+      <input type="text" id="name" name="name" autocomplete="name" required>
+
+      <label class="field" for="email">Email</label>
+      <input type="email" id="email" name="email" autocomplete="email" required>
+
+      <div id="bizname-wrap">
+        <label class="field" for="bizname">Business name</label>
+        <input type="text" id="bizname" name="bizname" autocomplete="organization">
+      </div>
+
+      <button class="submit" type="submit">Join the waitlist</button>
+      <p class="confirm" id="confirm" role="status">Thanks — you're on the list. We'll email you when Equal Travel Project launches.</p>
+    </form>
+
+    <p class="about-teaser">Want the story behind Equal Travel Project? An about page is coming soon.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Equal Travel Project</span>
+  <span>hello@equaltravelproject.com</span>
+</footer>
+
+<script>
+const roleInputs = document.querySelectorAll('input[name=role]');
+const bizWrap = document.getElementById('bizname-wrap');
+function syncBiz(){
+  bizWrap.classList.toggle('show', document.getElementById('role-business').checked);
+}
+roleInputs.forEach(r => r.addEventListener('change', syncBiz));
+syncBiz();
+
+document.getElementById('waitlist-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  const confirm = document.getElementById('confirm');
+  confirm.classList.add('show');
+  this.querySelector('.submit').textContent = "You're on the list";
+  this.querySelector('.submit').disabled = true;
+});
+</script>
+</body>
+</html>
