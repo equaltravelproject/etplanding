@@ -136,6 +136,9 @@ input[type=text],input[type=email]{
 .submit:disabled{opacity:.7;cursor:default}
 .confirm{margin-top:18px;padding:14px 16px;border-radius:10px;background:var(--bg);border:2px solid var(--moss);color:var(--ink);display:none}
 .confirm.show{display:block}
+.errmsg{margin-top:18px;padding:14px 16px;border-radius:10px;background:var(--bg);border:2px solid var(--clay);color:var(--ink)}
+.errmsg[hidden]{display:none}
+footer a{color:inherit}
 
 .about-teaser{color:var(--mute);font-size:.95em;margin-top:10px}
 
@@ -251,6 +254,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
       </div>
 
       <button class="submit" type="submit">Join the waitlist</button>
+      <p class="errmsg" id="error" role="alert" hidden>Sorry, something went wrong and we couldn't save your signup. Please check your name and email and try again, or email info@equaltravelproject.com.</p>
       <p class="confirm" id="confirm" role="status">Thanks — you're on the list. We'll email you when Equal Travel Project launches.</p>
     </form>
 
@@ -260,7 +264,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 
 <footer class="wrap">
   <span>© 2026 Equal Travel Project</span>
-  <span>hello@equaltravelproject.com</span>
+  <a href="mailto:info@equaltravelproject.com">info@equaltravelproject.com</a>
 </footer>
 
 <script>
@@ -272,12 +276,50 @@ function syncBiz(){
 roleInputs.forEach(r => r.addEventListener('change', syncBiz));
 syncBiz();
 
-document.getElementById('waitlist-form').addEventListener('submit', function(e){
+const SUPABASE_URL = 'https://sbpmahwrnpqugtylnfjz.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_4Zglz_1JYO1gDwi2Hu7lJA_TElQiGVG';
+
+document.getElementById('waitlist-form').addEventListener('submit', async function(e){
   e.preventDefault();
-  const confirm = document.getElementById('confirm');
-  confirm.classList.add('show');
-  this.querySelector('.submit').textContent = "You're on the list";
-  this.querySelector('.submit').disabled = true;
+  const btn = this.querySelector('.submit');
+  const err = document.getElementById('error');
+  const confirmEl = document.getElementById('confirm');
+  err.hidden = true;
+  const name = this.name.value.trim();
+  const email = this.email.value.trim();
+  if(!name || !/^\S+@\S+\.\S+$/.test(email)){
+    err.textContent = 'Please enter your name and a valid email address.';
+    err.hidden = false;
+    (name ? this.email : this.name).focus();
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  try{
+    const res = await fetch(SUPABASE_URL + '/rest/v1/waitlist', {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        role: this.role.value,
+        name: name,
+        email: email,
+        business: this.bizname.value.trim() || null
+      })
+    });
+    if(!res.ok && res.status !== 409) throw new Error('bad response');
+    confirmEl.classList.add('show');
+    btn.textContent = "You're on the list";
+  }catch(x){
+    err.textContent = "Sorry, something went wrong and we couldn't save your signup. Please try again, or email info@equaltravelproject.com.";
+    err.hidden = false;
+    btn.disabled = false;
+    btn.textContent = 'Join the waitlist';
+  }
 });
 </script>
 </body>
